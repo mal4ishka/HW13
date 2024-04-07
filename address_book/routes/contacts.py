@@ -1,5 +1,7 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, Depends, status, Response
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter
 from sqlalchemy.orm import Session
 from address_book.services.auth import auth_service
 from address_book.database.db import get_db
@@ -24,7 +26,7 @@ async def read_contact(contact_id: int, db: Session = Depends(get_db), current_u
     return tag
 
 
-@router.post("/create")
+@router.post("/create", dependencies=[Depends(RateLimiter(times=2, seconds=5))])
 async def create_new(body: ContactBase, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
     await repository_contacts.create_contact(current_user, body, db)
     return Response(status_code=status.HTTP_201_CREATED, content='Contact successfully created')
