@@ -13,8 +13,8 @@ from address_book.repository import users as repository_users
 
 class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    SECRET_KEY = settings.secret_key
-    ALGORITHM = settings.algorithm
+    SECRET_KEY = settings.SECRET_KEY
+    ALGORITHM = settings.ALGORITHM
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
     def verify_password(self, plain_password, hashed_password):

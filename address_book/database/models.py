@@ -20,7 +20,6 @@ class Contact(Base):
     birthday = Column(String)
     user_id = Column('user_id', ForeignKey('users.id', ondelete='CASCADE'), default=None)
     user = relationship('User', backref="notes")
-    confirmed = Column(Boolean, default=False)
 
 
 class User(Base):
@@ -32,3 +31,4 @@ class User(Base):
     created_at = Column('crated_at', DateTime, default=func.now())
     avatar = Column(String(255), nullable=True)
     refresh_token = Column(String(255), nullable=True)
+    confirmed = Column(Boolean, default=False)
