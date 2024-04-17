@@ -24,10 +24,19 @@ app.include_router(users.router, prefix='/api')
 
 @app.get("/")
 def read_root():
+    """
+        Simply returns a test message to make shure that web server is alive at the moment
+
+        :return: A dictionary {"message": "Hello World"}
+        :rtype: Dict
+    """
     return {"message": "Hello World"}
 
 
 @app.on_event("startup")
 async def startup():
+    """
+        Launches a redis server and FastAPILimiter (that allows to limit users frequency of requests to particular routes)
+    """
     r = await redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0, encoding="utf-8", decode_responses=True)
     await FastAPILimiter.init(r)

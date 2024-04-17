@@ -12,7 +12,7 @@ class ContactBase(BaseModel):
 
 class ContactResponse(ContactBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
         exclude_unset = True
 
 
@@ -20,6 +20,12 @@ class UserModel(BaseModel):
     username: str = Field(min_length=5, max_length=16)
     email: str
     password: str = Field(min_length=6, max_length=10)
+
+    class Config:
+        from_attributes = True
+
+    def __iter__(self):
+        yield self
 
 
 class UserDb(BaseModel):
@@ -30,12 +36,18 @@ class UserDb(BaseModel):
     avatar: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+    def __iter__(self):
+        yield self
 
 
 class UserResponse(BaseModel):
     user: UserDb
     detail: str = "User successfully created"
+
+    def __iter__(self):
+        yield self
 
 
 class TokenModel(BaseModel):

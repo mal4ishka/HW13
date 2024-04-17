@@ -21,6 +21,9 @@ class Contact(Base):
     user_id = Column('user_id', ForeignKey('users.id', ondelete='CASCADE'), default=None)
     user = relationship('User', backref="notes")
 
+    def __iter__(self):
+        yield self
+
 
 class User(Base):
     __tablename__ = "users"
@@ -32,3 +35,19 @@ class User(Base):
     avatar = Column(String(255), nullable=True)
     refresh_token = Column(String(255), nullable=True)
     confirmed = Column(Boolean, default=False)
+
+    def to_dict(self):
+        return {'user':
+                        {
+                            "id": self.id,
+                            "username": self.username,
+                            "email": self.email,
+                            "created_at": self.created_at,
+                            "avatar": self.avatar,
+                            "refresh_token": self.refresh_token,
+                            "confirmed": self.confirmed
+                        }
+                }
+
+    def __str__(self):
+        return f"id={self.id}, username={self.username}, email={self.email}, created_at={self.created_at}, avatar={self.avatar}, refresh_token={self.refresh_token}, confirmed={self.confirmed}"
